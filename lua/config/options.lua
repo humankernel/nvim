@@ -16,10 +16,10 @@
 
 
 -- Enable virtual text
---vim.diagnostic.config({ virtual_lines = { current_line = true} })
-vim.diagnostic.config({ virtual_text = true })
+vim.diagnostic.config({ virtual_lines = { current_line = true } })
+--vim.diagnostic.config({ virtual_text = true })
 
-vim.o.winborder = "rounded"
+--vim.o.winborder = "rounded"
 
 -- Keybindings
 vim.keymap.set({ 'n', 'x', 'o' }, 'gy', '"+y', { desc = 'Copy to clipboard' })
