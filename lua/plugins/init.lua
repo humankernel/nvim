@@ -6,8 +6,8 @@ return {
     -- see `https://github.com/folke/which-key.nvim`
     {
         "folke/which-key.nvim",
+        lazy = true,
         event = "VeryLazy",
-        opts = {},
         keys = {
             {
                 "<leader>?",

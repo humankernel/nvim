@@ -1,15 +1,12 @@
 return {
     {
         "Shatur/neovim-ayu",
-        opts = {
-            mirage = false,
-            terminal = true,
-            overrides = {},
-        },
+        enable = false,
         config = function()
             vim.cmd([[colorscheme ayu-dark]])
         end
     },
+    { "sainnhe/gruvbox-material" },
     --{
     --    'JoshPorterDev/nvim-base16',
     --    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
