@@ -1,9 +1,3 @@
--- ColorScheme
---local ok_theme = pcall(vim.cmd.colorscheme, 'retrobox')
---if not ok_theme then
---  vim.cmd.colorscheme('habamax')
---end
-
 -- Native completions
 --vim.api.nvim_create_autocmd('LspAttach', {
 --    callback = function(ev)
@@ -14,16 +8,20 @@
 --    end,
 --})
 
+vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>")
 
 -- Enable virtual text
 vim.diagnostic.config({ virtual_lines = { current_line = true } })
 --vim.diagnostic.config({ virtual_text = true })
 
---vim.o.winborder = "rounded"
-
 -- Keybindings
 vim.keymap.set({ 'n', 'x', 'o' }, 'gy', '"+y', { desc = 'Copy to clipboard' })
 vim.keymap.set({ 'n', 'x', 'o' }, 'gp', '"+p', { desc = 'Paste clipboard text' })
+
+-- split
+vim.keymap.set("n", "=", ":split<CR>")
+vim.keymap.set("n", "|", ":vsplit<CR>")
+vim.keymap.set("n", "<leader>q", ":close<CR>")
 
 -- See `:help mapleader`
 -- `mapleader` and `maplocalleader` must run before
@@ -88,4 +86,35 @@ vim.opt.writebackup = false -- if a file is being edited by another program (or 
 vim.opt.swapfile = false    -- creates a swapfile
 vim.opt.undofile = true     -- save undo history
 
--- split
+
+-- autocmd
+vim.api.nvim_create_autocmd("TextYankPost", {
+    desc = "Highlight when yanking text",
+    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    callback = function() 
+        vim.highlight.on_yank()
+    end
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+    desc = "Highlight when yanking text",
+    group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
+    callback = function() 
+        vim.opt.number = false 
+        vim.opt.relativenumber= false
+    end
+})
+
+local job_id = 0
+vim.keymap.set("n", "<space>st", function()
+    vim.cmd.vnew()
+    vim.cmd.term()
+    vim.cmd.wincmd("J")
+    vim.api.nvim_win_set_height(0, 15)
+
+    job_id = vim.bo.channel
+end)
+
+vim.keymap.set("n", "<space>example", function()
+    vim.fn.chansend(job_id, { "echo hi\r\n" })
+end)
