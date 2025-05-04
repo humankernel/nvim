@@ -4,7 +4,8 @@ return {
     lazy = true,
     event = "VeryLazy",
     dependencies = {
-      "leoluz/nvim-dap-go", -- go dap adapter
+      "leoluz/nvim-dap-go",             -- go 
+      "mfussenegger/nvim-dap-python",   -- python
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
       "nvim-neotest/nvim-nio",
@@ -16,6 +17,8 @@ return {
 
       require("dapui").setup()
       require("dap-go").setup()
+      require("dap-python").setup("uv")
+      require('dap-python').test_runner = 'pytest'
 
       require("nvim-dap-virtual-text").setup {}
 
