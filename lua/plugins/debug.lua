@@ -5,6 +5,7 @@ return {
     event = "VeryLazy",
     dependencies = {
       "leoluz/nvim-dap-go", -- go
+      "mfussenegger/nvim-dap-python",   -- python
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
       "nvim-neotest/nvim-nio",
@@ -74,7 +75,8 @@ return {
               cwd = "${workspaceFolder}",
           }
       }
-
+      require("dap-python").setup("uv")
+      require('dap-python').test_runner = 'pytest'
       require("nvim-dap-virtual-text").setup()
 
       -- dap ui

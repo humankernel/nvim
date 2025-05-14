@@ -19,7 +19,7 @@ vim.keymap.set({ 'n', 'x', 'o' }, 'gy', '"+y', { desc = 'Copy to clipboard' })
 vim.keymap.set({ 'n', 'x', 'o' }, 'gp', '"+p', { desc = 'Paste clipboard text' })
 
 -- split
-vim.keymap.set("n", "=", ":split<CR>")
+vim.keymap.set("n", "\\", ":split<CR>")
 vim.keymap.set("n", "|", ":vsplit<CR>")
 vim.keymap.set("n", "<leader>q", ":close<CR>")
 
@@ -96,6 +96,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end
 })
 
+vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 vim.api.nvim_create_autocmd("TermOpen", {
     desc = "Highlight when yanking text",
     group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
@@ -111,7 +112,6 @@ vim.keymap.set("n", "<space>st", function()
     vim.cmd.term()
     vim.cmd.wincmd("J")
     vim.api.nvim_win_set_height(0, 15)
-
     job_id = vim.bo.channel
 end)
 
