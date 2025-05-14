@@ -1,7 +1,9 @@
 -- Find, Filter, Preview, Pick. All lua, all the time.
 -- see `https://github.com/nvim-telescope/telescope.nvim`
 return {
-    'nvim-telescope/telescope.nvim', lazy = true, event = "VeryLazy",
+    'nvim-telescope/telescope.nvim', 
+    lazy = true, 
+    event = "VeryLazy",
     dependencies = {
         'nvim-lua/plenary.nvim',
         -- significantly improve sorting performance
@@ -40,39 +42,48 @@ return {
         pcall(telescope.load_extension, 'frecency')
         pcall(telescope.load_extension, 'lazy_plugins')
         pcall(telescope.load_extension, 'ui-select')
-
-        -- Keybindings (:help telescope.builtin)
+    end,
+    keys = function() -- (:help telescope.builtin)
         local builtin = require('telescope.builtin')
-        vim.keymap.set('n', '<leader>sf', builtin.find_files,  { desc = '[S]earch [F]iles' })
-        vim.keymap.set('n', '<leader>s.', builtin.oldfiles,    { desc = '[S]earch Recent Files ("." for repeat)' })
-        vim.keymap.set('n', '<leader>sg', builtin.live_grep,   { desc = '[S]earch [G]rep' })
-        vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-        vim.keymap.set('n', '<leader>sr', builtin.resume,      { desc = '[S]earch [R]esume' })
-        vim.keymap.set('n', '<leader>sh', builtin.help_tags,   { desc = '[S]earch [H]elp' })
-        vim.keymap.set('n', '<leader>sk', builtin.keymaps,     { desc = '[S]earch [K]eymaps' })
-        vim.keymap.set('n', '<leader>ss', builtin.builtin,     { desc = '[S]earch [S]elect Telescope' })
-        vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+        return {
+            { '<leader>sf', builtin.find_files,  desc = '[S]earch [F]iles' },
+            { '<leader>s.', builtin.oldfiles,    desc = '[S]earch Recent Files ("." for repeat)' },
+            { '<leader>sg', builtin.live_grep,   desc = '[S]earch [G]rep' },
+            { '<leader>sd', builtin.diagnostics, desc = '[S]earch [D]iagnostics' },
+            { '<leader>sr', builtin.resume,      desc = '[S]earch [R]esume' },
+            { '<leader>sh', builtin.help_tags,   desc = '[S]earch [H]elp' },
+            { '<leader>sk', builtin.keymaps,     desc = '[S]earch [K]eymaps' },
+            { '<leader>ss', builtin.builtin,     desc = '[S]earch [S]elect Telescope' },
+            { '<leader>sw', builtin.grep_string, desc = '[S]earch [W]ord' },
+            { 
+                '<leader>/',
+                function()
+                    builtin.current_buffer_fuzzy_find(themes.get_dropdown { winblend = 10, previewer = false })
+                end, 
+                desc = '[/] Fuzzily search in current buffer' 
+            },
 
-        -- example of overriding default behavior and theme
-        -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-        vim.keymap.set('n', '<leader>/', function()
-            builtin.current_buffer_fuzzy_find(themes.get_dropdown {
-                winblend = 10,
-                previewer = false,
-            })
-        end, { desc = '[/] Fuzzily search in current buffer' })
+            -- It's also possible to pass additional configuration options.
+            -- see `:help telescope.builtin.live_grep()` for information about particular keys
+            { 
+                '<leader>s/', 
+                function()
+                    builtin.live_grep {
+                        grep_open_files = true,
+                        prompt_title = 'Live Grep in Open Files',
+                    }
+                end,  
+                desc = '[S]earch [/] in Open Files' 
+            },
 
-        -- It's also possible to pass additional configuration options.
-        -- see `:help telescope.builtin.live_grep()` for information about particular keys
-        vim.keymap.set('n', '<leader>s/', function()
-            builtin.live_grep {
-                grep_open_files = true,
-                prompt_title = 'Live Grep in Open Files',
+            -- Shortcut for searching your Neovim configuration files
+            { 
+                '<leader>sn', 
+                function()
+                    builtin.find_files { cwd = vim.fn.stdpath 'config' }
+                end,  
+                desc = '[S]earch [N]eovim files' 
             }
-        end, { desc = '[S]earch [/] in Open Files' })
-
-        -- Shortcut for searching your Neovim configuration files
-        vim.keymap.set('n', '<leader>sn', function()
-            builtin.find_files { cwd = vim.fn.stdpath 'config' }
-        end, { desc = '[S]earch [N]eovim files' })    end
+        }
+    end,
 }

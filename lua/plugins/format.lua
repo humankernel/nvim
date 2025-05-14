@@ -2,6 +2,8 @@ return {
     'stevearc/conform.nvim',
     lazy = true,
     event = 'VeryLazy',
+    ---@module 'conform'
+    ---@type conform.SetupOpts
     opts = {
         formatters_by_ft = {
             lua = { "stylua" },

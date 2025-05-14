@@ -5,6 +5,8 @@ return {
     lazy = true,
     event = "VeryLazy",
     build = ":TSUpdate",
+    ---@module 'nvim-treesitter'
+    ---@type nvim-treesitter.SetupOpts
     opts = {
         ensure_installed = { "lua", "vim", "vimdoc" },
         auto_install = true,

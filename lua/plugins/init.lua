@@ -1,6 +1,12 @@
 return {
     -- Statusline
-    { 'echasnovski/mini.statusline', version = false, opts = {} },
+    { 
+        'echasnovski/mini.statusline', 
+        lazy = true,
+        event = "VeryLazy",
+        version = false, 
+        opts = {} 
+    },
 
     -- WhichKey helps you remember your Neovim keymaps
     -- see `https://github.com/folke/which-key.nvim`

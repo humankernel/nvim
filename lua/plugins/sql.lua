@@ -1,6 +1,5 @@
 return {
   "kristijanhusak/vim-dadbod-ui",
-  enable = true,
   lazy = true,
   event = "VeryLazy",
   dependencies = {

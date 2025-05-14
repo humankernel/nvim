@@ -2,6 +2,8 @@
 -- see: `https://github.com/xeluxee/competitest.nvim`
 return {
     "xeluxee/competitest.nvim",
+    lazy = true,
+    event = "VeryLazy",
     dependencies = { "MunifTanjim/nui.nvim" },
     keys = {
         { "<leader>tr", ":CompetiTest run <CR>", desc = "[T]est [R]un" },
