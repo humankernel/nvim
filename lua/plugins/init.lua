@@ -8,6 +8,13 @@ return {
         opts = {} 
     },
 
+    -- precognition discover motions
+    {
+        "tris203/precognition.nvim",
+        event = "VeryLazy",
+        opts = {}
+    },
+
     -- WhichKey helps you remember your Neovim keymaps
     -- see `https://github.com/folke/which-key.nvim`
     {

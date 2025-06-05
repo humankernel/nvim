@@ -35,6 +35,24 @@ return {
       -- adapters
       require("dapui").setup()
       require("dap-go").setup()
+      dap.adapters.mojo = {
+      type = 'executable',
+          command = 'mojo',
+          args = { 'test', '--vscode', '--stop-on-entry', '-I', '.' },
+          name = 'mojo',
+        }
+
+    dap.configurations.mojo = {
+      {
+        name = 'Debug Mojo Test',
+        type = 'mojo',
+        request = 'launch',
+        program = '${file}',
+        cwd = '${workspaceFolder}',
+        stopOnEntry = true,
+        args = {},
+      },
+    }
       dap.adapters.gdb = {
           type = "executable",
           command = "gdb",
