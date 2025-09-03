@@ -9,6 +9,7 @@ vim.lsp.enable({
     "ruff",     -- python linter
     "ts_ls",    -- typescript
     "tailwind", -- tailwindcss
+    "protols"   -- protocol buffers
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
