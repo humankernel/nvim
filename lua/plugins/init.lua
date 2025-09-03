@@ -9,7 +9,6 @@ return {
     },
 
     {
-<<<<<<< HEAD
         'saghen/blink.cmp',
         lazy = true,
         event = "InsertEnter",
@@ -127,11 +126,6 @@ return {
         lazy = true,
         event = "BufWinEnter",
         version = false,
-=======
-        "tris203/precognition.nvim",
-        enabled = false,
-        event = "VeryLazy",
->>>>>>> 17ee31be95c11617ad171ed11852fd04428d7987
         opts = {}
     },
 
