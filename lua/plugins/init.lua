@@ -1,8 +1,6 @@
 return {
     {
-        "Shatur/neovim-ayu",
-        lazy = true,
-        event = "VimEnter",
+        "Shatur/neovim-ayu", lazy = true, event = "VimEnter",
         config = function()
             vim.cmd([[colorscheme ayu-dark]])
         end
@@ -77,10 +75,7 @@ return {
                 javascript = { "prettierd", "prettier", stop_after_first = true },
                 typescript = { "prettierd", "prettier", stop_after_first = true },
             },
-            format_on_save = {
-                timeout_ms = 500,
-                lsp_format = "fallback",
-            },
+            format_on_save = { timeout_ms = 500, lsp_format = "fallback" },
         },
     },
 
@@ -200,17 +195,17 @@ return {
 
     -- competitest.nvim is a testcase manager and checker
     -- see: `https://github.com/xeluxee/competitest.nvim`
-    {
-        "xeluxee/competitest.nvim",
-        lazy = true,
-        event = "BufReadPre",
-        dependencies = { "MunifTanjim/nui.nvim" },
-        keys = {
-            { "<leader>tr", ":CompetiTest run <CR>",             desc = "[T]est [R]un" },
-            { "<leader>tn", ":CompetiTest add_testcase <CR>",    desc = "[T]est [A]dd", },
-            { "<leader>td", ":CompetiTest delete_testcase <CR>", desc = "[T]est [D]elete", },
-            { "<leader>te", ":CompetiTest edit_testcase <CR>",   desc = "[T]est [E]dit", },
-        },
-        opts = {},
-    },
+    -- {
+    --     "xeluxee/competitest.nvim",
+    --     lazy = true,
+    --     event = "BufReadPre",
+    --     dependencies = { "MunifTanjim/nui.nvim" },
+    --     keys = {
+    --         { "<leader>tr", ":CompetiTest run <CR>",             desc = "[T]est [R]un" },
+    --         { "<leader>tn", ":CompetiTest add_testcase <CR>",    desc = "[T]est [A]dd", },
+    --         { "<leader>td", ":CompetiTest delete_testcase <CR>", desc = "[T]est [D]elete", },
+    --         { "<leader>te", ":CompetiTest edit_testcase <CR>",   desc = "[T]est [E]dit", },
+    --     },
+    --     opts = {},
+    -- },
 }

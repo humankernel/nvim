@@ -65,7 +65,6 @@ vim.diagnostic.config({ virtual_lines = { current_line = true } })
 -- =========================
 -- Keybindings
 -- =========================
-
 vim.keymap.set("n", "<space><space>x", "<cmd>source %<CR>", { desc = "Source current file" })
 vim.keymap.set("n", "<leader>o", ":update<CR> :source<CR>", { desc = "Save and source file" })
 vim.keymap.set("n", "<leader>w", ":write<CR>", { desc = "Save file" })
@@ -94,6 +93,13 @@ end, { desc = "Open terminal in new split below with height 15" })
 -- =========================
 -- Autocommands
 -- =========================
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+  desc = "Remember yanked text",
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight yanked text",
