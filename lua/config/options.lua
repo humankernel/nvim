@@ -70,6 +70,10 @@ vim.keymap.set("n", "<leader>o", ":update<CR> :source<CR>", { desc = "Save and s
 vim.keymap.set("n", "<leader>w", ":write<CR>", { desc = "Save file" })
 vim.keymap.set("n", "<leader>q", ":quit<CR>", { desc = "Quit window" })
 
+-- Identation
+vim.keymap.set("v", "<", "<gv", { desc = "Tab Right" })
+vim.keymap.set("v", ">", ">gv", { desc = "Tab Left" })
+
 -- Clipboard mappings (copy/paste system clipboard)
 vim.keymap.set({ "n", "x", "o" }, "gy", "+y", { desc = "Copy to clipboard" })
 vim.keymap.set({ "n", "x", "o" }, "gp", "+p", { desc = "Paste clipboard text" })
@@ -95,10 +99,10 @@ end, { desc = "Open terminal in new split below with height 15" })
 -- =========================
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Remember yanked text",
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+    desc = "Remember yanked text",
+    callback = function()
+        vim.highlight.on_yank()
+    end,
 })
 
 vim.api.nvim_create_autocmd("TextYankPost", {

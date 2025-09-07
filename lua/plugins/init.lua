@@ -1,6 +1,8 @@
 return {
     {
-        "Shatur/neovim-ayu", lazy = true, event = "VimEnter",
+        "Shatur/neovim-ayu",
+        lazy = true,
+        event = "VimEnter",
         config = function()
             vim.cmd([[colorscheme ayu-dark]])
         end
@@ -208,4 +210,182 @@ return {
     --     },
     --     opts = {},
     -- },
+    -- Find, Filter, Preview, Pick. All lua, all the time.
+    -- see `https://github.com/nvim-telescope/telescope.nvim`
+    {
+        'nvim-telescope/telescope.nvim',
+        lazy = true,
+        cmd = "Telescope",
+        dependencies = {
+            { "nvim-lua/plenary.nvim",                    lazy = true },
+            { "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true },
+            { "nvim-telescope/telescope-frecency.nvim",   lazy = true },
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            local telescope = require('telescope')
+            local themes = require('telescope.themes')
+
+            telescope.setup({
+                pickers = { find_files = { theme = "dropdown", hidden = true } },
+                extensions = {
+                    ['ui-select'] = { themes.get_dropdown() },
+                    frecency = {
+                        default_workspace = 'CWD',
+                        show_scores = true,
+                        show_unindexed = true,
+                        disable_devicons = false,
+                        ignore_patterns = {
+                            '*.git/*',
+                            '*/tmp/*',
+                            '*/lua-language-server/*',
+                        },
+                    },
+                },
+            })
+
+            pcall(telescope.load_extension, 'fzf')
+            pcall(telescope.load_extension, 'frecency')
+            pcall(telescope.load_extension, 'lazy_plugins')
+            pcall(telescope.load_extension, 'ui-select')
+        end,
+        keys = {
+            { "<leader>sf", "<cmd>Telescope find_files<cr>",  desc = "[S]earch [F]iles" },
+            { "<leader>s.", "<cmd>Telescope oldfiles<cr>",    desc = "[S]earch Recent Files" },
+            { "<leader>sg", "<cmd>Telescope live_grep<cr>",   desc = "[S]earch [G]rep" },
+            { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "[S]earch [D]iagnostics" },
+            { "<leader>sr", "<cmd>Telescope resume<cr>",      desc = "[S]earch [R]esume" },
+            { "<leader>sh", "<cmd>Telescope help_tags<cr>",   desc = "[S]earch [H]elp" },
+            { "<leader>sk", "<cmd>Telescope keymaps<cr>",     desc = "[S]earch [K]eymaps" },
+            { "<leader>ss", "<cmd>Telescope builtin<cr>",     desc = "[S]earch [S]elect Telescope" },
+            { "<leader>sw", "<cmd>Telescope grep_string<cr>", desc = "[S]earch [W]ord" },
+            {
+                "<leader>/",
+                function()
+                    require("telescope.builtin").current_buffer_fuzzy_find(
+                        require('telescope.themes').get_dropdown({ winblend = 10, previewer = false })
+                    )
+                end,
+                desc = "[/] Fuzzily search in current buffer",
+            },
+            {
+                "<leader>s/",
+                function()
+                    require("telescope.builtin").live_grep({
+                        grep_open_files = true,
+                        prompt_title = "Live Grep in Open Files",
+                    })
+                end,
+                desc = "[S]earch [/] in Open Files",
+            },
+            {
+                "<leader>sn",
+                function()
+                    require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
+                end,
+                desc = "[S]earch [N]eovim files",
+            },
+        },
+    },
+
+
+    {
+        "mfussenegger/nvim-dap",
+        lazy = true,
+        cmd = { "DapContinue", "DapToggleBreakpoint", "DapStepOver", "DapStepInto", "DapStepOut" },
+        dependencies = {
+            { "rcarriga/nvim-dap-ui", lazy = true, event = "VeryLazy", config = function() require("dapui").setup() end, },
+            {
+                "theHamsta/nvim-dap-virtual-text",
+                lazy = true,
+                event = "VeryLazy",
+                config = function() require("nvim-dap-virtual-text").setup() end,
+            },
+            { "leoluz/nvim-dap-go",   lazy = true, ft = "go",          config = function() require("dap-go").setup() end, },
+            {
+                "mfussenegger/nvim-dap-python",
+                lazy = true,
+                ft = "python",
+                config = function()
+                    require("dap-python").setup("uv")
+                    require("dap-python").test_runner = "pytest"
+                end,
+            },
+            "nvim-neotest/nvim-nio",
+        },
+        keys = function()
+            local dap = require("dap")
+            return {
+                { "<space>b",  dap.toggle_breakpoint, desc = "Toggle Breakpoint" },
+                { "<space>gb", dap.run_to_cursor,     desc = "Run to Cursor" },
+                { "<F1>",      dap.continue,          desc = "Continue" },
+                { "<F2>",      dap.step_into,         desc = "Step Into" },
+                { "<F3>",      dap.step_over,         desc = "Step Over" },
+                { "<F4>",      dap.step_out,          desc = "Step Out" },
+                { "<F5>",      dap.step_back,         desc = "Step Back" },
+                { "<F13>",     dap.restart,           desc = "Restart" },
+                {
+                    "<space>?",
+                    function() require("dapui").eval(nil, { enter = true }) end,
+                    desc = "Eval var under cursor"
+                }
+            }
+        end,
+        config = function()
+            local dap = require "dap"
+
+            -- GDB adapter config
+            dap.adapters.gdb = {
+                type = "executable",
+                command = "gdb",
+                args = { "--interpreter=dap", "--eval-command", "set print pretty on" },
+            }
+            dap.configurations.c = {
+                {
+                    name = "Launch",
+                    type = "gdb",
+                    request = "launch",
+                    program = function()
+                        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    end,
+                    cwd = "${workspaceFolder}",
+                    stopAtBeginningOfMainSubprogram = false,
+                },
+                {
+                    name = "Select and attach to process",
+                    type = "gdb",
+                    request = "attach",
+                    program = function()
+                        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    end,
+                    pid = function()
+                        local name = vim.fn.input("Executable name (filter): ")
+                        return require("dap.utils").pick_process({ filter = name })
+                    end,
+                    cwd = "${workspaceFolder}",
+                },
+                {
+                    name = "Attach to gdbserver :1234",
+                    type = "gdb",
+                    request = "attach",
+                    target = "localhost:1234",
+                    program = function()
+                        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+                    end,
+                    cwd = "${workspaceFolder}",
+                }
+            }
+            require("dap-python").setup("uv")
+            require('dap-python').test_runner = 'pytest'
+            require("nvim-dap-virtual-text").setup()
+
+            -- UI listeners
+            local ui = require("dapui")
+            dap.listeners.before.attach.dapui_config = function() ui.open() end
+            dap.listeners.before.launch.dapui_config = function() ui.open() end
+            dap.listeners.before.event_terminated.dapui_config = function() ui.close() end
+            dap.listeners.before.event_exited.dapui_config = function() ui.close() end
+        end,
+    }
+
 }
